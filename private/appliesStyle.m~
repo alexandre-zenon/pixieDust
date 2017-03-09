@@ -1,0 +1,102 @@
+function appliesStyle(style,fieldname,object,index)
+if strcmp(get(object,'Tag'),'Colorbar')
+    colorbar=true;
+    styl=style.colorbar.(fieldname);
+    %     if isempty(get(yObject,'String'))
+    %             set(yObject,'String', style.colorbar.axes.label);
+    %         end
+    %         set(yObject,'Rotation', style.colorbar.axes.LabelRotation);
+else
+    colorbar=false;
+    styl=style.(fieldname);
+end
+properties=fieldnames(styl);
+if strcmp(fieldname,'labels')
+    xObject=get(object,'XLabel');
+    yObject=get(object,'YLabel');
+    zObject=get(object,'ZLabel');
+    if isempty(get(xObject,'String'))
+        safeSet(xObject,'String', styl,'XLabel');
+    end
+    if isempty(get(yObject,'String'))
+        safeSet(yObject,'String', styl,'YLabel');
+    end
+    if isempty(get(zObject,'String'))
+        safeSet(zObject,'String', styl,'ZLabel');
+    end
+
+    for aa = 1:length(properties)
+        if isempty(strfind(properties{aa},'LabelRotation')) & isempty(strfind(properties{aa},'Label'))
+            if ~isempty(strfind(lower(properties{aa}),'color')) && ~isempty(index)
+                safeSet(xObject,properties{aa},styl,properties{aa},index);
+                safeSet(yObject,properties{aa},styl,properties{aa},index);
+                safeSet(zObject,properties{aa},styl,properties{aa},index);
+            elseif ~isempty(strfind(lower(properties{aa}),'color')) && isempty(index)
+                safeSet(xObject,properties{aa},styl,properties{aa},1);
+                safeSet(yObject,properties{aa},styl,properties{aa},1);
+                safeSet(zObject,properties{aa},styl,properties{aa},1);
+            else
+                safeSet(xObject,properties{aa},styl,properties{aa});
+                safeSet(yObject,properties{aa},styl,properties{aa});
+                safeSet(zObject,properties{aa},styl,properties{aa});
+            end
+        elseif ~isempty(strfind(properties{aa},'XLabelRotation')) && ~colorbar
+            safeSet(xObject,'Rotation',styl,properties{aa});
+        elseif ~isempty(strfind(properties{aa},'YLabelRotation')) && ~colorbar
+            safeSet(yObject,'Rotation',styl,properties{aa});
+        elseif ~isempty(strfind(properties{aa},'ZLabelRotation')) && ~colorbar
+            safeSet(zObject,'Rotation',styl,properties{aa});
+        end
+    end
+
+elseif strcmp(fieldname,'axes')
+    for aa = 1:length(properties)
+        if ~isempty(strfind(lower(properties{aa}),'color'))
+            if ~isempty(strfind(lower(properties{aa}),'color')) && ~isempty(index)
+                safeSet(object,properties{aa},styl,properties{aa},index);
+            elseif isempty(strfind(lower(properties{aa}),'color')) && ~isempty(index)
+                safeSet(object,properties{aa},styl,properties{aa});
+            end
+        else
+            safeSet(object,properties{aa},styl.(properties{aa}));
+        end
+    end
+else
+    for aa = 1:length(properties)
+        if ~isempty(strfind(lower(properties{aa}),'color'))
+            if ischar(styl.(properties{aa}))
+                safeSet(object,properties{aa},styl.(properties{aa}));
+            else
+                if ~isempty(strfind(lower(properties{aa}),'color')) && ~isempty(index)
+                    safeSet(object,properties{aa},styl.(properties{aa})(index,:));
+                elseif isempty(strfind(lower(properties{aa}),'color')) && ~isempty(index)
+                    safeSet(object,properties{aa},styl.(properties{aa}));
+                end
+            end
+        elseif ~isempty(strfind(lower(properties{aa}),'axes'))
+            propertiesAxes=fieldnames(styl.axes);
+            for aa = 1:length(propertiesAxes)
+                safeSet(gca,propertiesAxes{aa},styl.axes.(propertiesAxes{aa}));
+            end
+        else
+            safeSet(object,properties{aa},styl.(properties{aa}));
+        end
+    end
+end
+end
+
+function safeSet(object,property,valueStruct,varargin)
+if length(varargin)==1
+    valueField=varar
+    indexing=varargin{1};
+else
+    indexing=NaN;
+end
+if isfield(get(object),property) && isfield(valueStruct,valueField)
+    if ~any(isnan(indexing))
+        set(object,property,valueStruct.(valueField)(indexing));
+    else
+        set(object,property,valueStruct.(valueField));
+    end
+end
+end
