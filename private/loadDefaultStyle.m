@@ -6,7 +6,7 @@ set(0,'units','centimeters');
 screenSize=get(0,'screensize');
 screenW=screenSize(3);
 screenH=screenSize(4);
-defaultStyle.figure.Position                =   [1 1 screenW*9/10 screenH*9/10];
+defaultStyle.figure.Position                =   [screenW*1/20 screenH*1/20 screenW*9/10 screenH*9/10];
 defaultStyle.figure.ColorMap                =   hsv2rgb([linspace(0,0.6,64)' ones(64,1)*.8 ones(64,1)*.9]);
 
 %% AXES PROPERTIES %%
@@ -61,6 +61,7 @@ defaultStyle.labels.Interpreter            =   'latex';  % [{tex} | latex]
 %defaultStyle.axes.Position                  =   [0.2 0.2 0.75 0.7];
 
 %% LEGEND PROPERTIES %%
+defaultStyle.legend.addDefault              =   false;%if true adds legend to plots lacking one
 defaultStyle.legend.colorLabel              =   {};
 
 %% COLORBAR PROPERTIES %%

@@ -38,8 +38,6 @@ for ii = 1:length(h)
                 else
                     plotType{ii}='line';
                 end
-            else
-                plotType{ii}='unknown';
             end
         end
     end

@@ -1,5 +1,5 @@
 function style = default()
-style.figure.Position = 				[1            1       38.071      28.5533];
+style.figure.Position = 				[2.11506      1.58629       38.071      28.5533];
 style.figure.ColorMap = 				[0.9        0.18        0.18;...
 										0.9     0.22114        0.18;...
 										0.9     0.26229        0.18;...
@@ -103,6 +103,7 @@ style.labels.XLabel = 					'label of x axis';
 style.labels.YLabel = 					'label of y axis';
 style.labels.ZLabel = 					'label of z axis';
 style.labels.Interpreter = 				'latex';
+style.legend.addDefault = 				false;
 style.colorbar.axes.Location = 			'EastOutside';
 style.colorbar.labels.YLabel = 			'Color label';
 style.colorbar.labels.fYLabelRotation = [270];

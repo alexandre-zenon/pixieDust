@@ -28,7 +28,11 @@ plot2Label=[];
 
 for cc = children'
     next=next+1;
-    x=get(cc,'XData');
+    try 
+        x=get(cc,'XData'); 
+    catch
+        x=[]; 
+    end
     maxX=max([maxX; x(:)]);% for determining axis lengths
     minX=min([minX; x(:)]);
     switch plotType{next}

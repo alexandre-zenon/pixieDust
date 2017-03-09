@@ -17,6 +17,7 @@ for ii = 1:length(h)
         case 'surf'
         case 'image'
         case 'colorbar'
+        case 'legend'
         otherwise
             colors(ii,:)=get(h(ii),'Color');
     end

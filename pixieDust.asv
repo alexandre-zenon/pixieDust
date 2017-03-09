@@ -29,27 +29,27 @@ appliesStyle(style,'figure',gcf,[]);
 
 %% AXES STYLE
 figAxes=get(gcf,'Children');% takes each axis one by one
-lgd=[];
 for figAxis = figAxes'
     if strcmp(get(figAxis,'Tag'),'legend')
         lgd=figAxis;
     else
-        set(gcf, 'CurrentAxes', figAxis);
-        appliesStyle(style,'axes',gca,[]);
-        appliesStyle(style,'labels',gca,[]);%axis handle is given for labels so as to allow the function to access both x and y labels
-        
-        %% changes each individual plot
-        [children,plotType,plot2Label,xdata,ydata,colData,minX,maxX]=changesDataPlot(figAxis,style);
-        
-        %% ADDS LEGEND IF NEEDED %%
-        lgd=addsLegend(style,plot2Label,lgd);
-        
-        %% ADDS REGRESSION LINE TO SCATTER PLOT IF NEEDED %%
-        addsRegressionLine(plotType,style,xdata,ydata,colData);
-        
-        %% ADAPTS AXIS LENGTH AND X TICKS FOR BAR PLOTS %%
-        adaptsAxes(children,plotType,figAxis,minX,maxX,lgd);
-    end
+
+    set(gcf, 'CurrentAxes', figAxis);
+    appliesStyle(style,'axes',gca,[]);
+    appliesStyle(style,'labels',gca,[]);%axis handle is given for labels so as to allow the function to access both x and y labels
+    
+    %% changes each individual plot
+    [children,plotType,plot2Label,xdata,ydata,colData,minX,maxX]=changesDataPlot(figAxis,style);
+    
+    %% ADDS LEGEND IF NEEDED %%
+    lgd=addsLegend(style,plot2Label,lgd);
+
+    %% ADDS REGRESSION LINE TO SCATTER PLOT IF NEEDED %%
+    addsRegressionLine(plotType,style,xdata,ydata,colData);
+
+    %% ADAPTS AXIS LENGTH AND X TICKS FOR BAR PLOTS %%
+    adaptsAxes(children,plotType,figAxis,minX,maxX,lgd);
+
 end
 set(gcf,'PaperPositionMode','auto');
 

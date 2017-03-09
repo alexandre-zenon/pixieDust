@@ -25,15 +25,7 @@ if length(varargin)>=1
     style=varargin{1};
 end
 if length(varargin)==2
-    if iscell(varargin{2})
-        if iscell(varargin{2}{1})
-            labels=varargin{2};
-        else
-            for ii = 1:length(varargin{2})
-                labels{ii}{1}=varargin{2}{ii};
-            end
-        end
-    end
+    labels=varargin{2};
 end
 if length(varargin)>2
     error('pixiePanel accepts max three arguments');
