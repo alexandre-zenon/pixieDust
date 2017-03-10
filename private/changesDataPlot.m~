@@ -102,21 +102,15 @@ for cc = children'
             if isfield(style,'errorbar') && isfield(style.errorbar,'Nudge') && style.errorbar.Nudge 
                 numEB=sum(strcmp(plotType,'errorbar'));
                 minSpace=min(diff(errorbarXData(1:9:end)));
-                sep=minSpace/10;
-                d=(sep*(l-1));
-                errorbarXData=errorbarXData+d-(sep*(numEB-1))/2;
                 
-                errorbarLineXData          = ...
-                get(hE_c(1), 'XData'       );
-                errorbarLineXData=errorbarLineXData+d-(sep*(numEB-1))/2;
-                set(hE_c(1), 'XData', errorbarLineXData);
+                errorbarXData=errorbarXData-;
             end
             set(hE_c(end), 'XData', errorbarXData);
             set(hE_c(end), 'YData', errorbarYData);
             appliesStyle(style,'errorbar',cc,l);
             
-            maxX=max([maxX; errorbarXData(:)]);
-            minX=min([minX; errorbarXData(:)]);
+            minX=minX-errorbarWidth;
+            maxX=maxX+errorbarWidth;
         otherwise
             appliesStyle(style,plotType{next},cc,[]);
         

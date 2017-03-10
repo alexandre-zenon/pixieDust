@@ -84,16 +84,17 @@ defaultStyle.bar.FaceColor                  =   pastel(defaultColors);
 defaultStyle.bar.EdgeColor                  =   dark(defaultColors);
 defaultStyle.bar.LineWidth                  =   2;
 defaultStyle.bar.errorBar.width             =   3;
-defaultStyle.bar.errorBar.color             =   [0 0 0];
+defaultStyle.bar.errorBar.Color             =   [0 0 0];
 %LINES
 defaultStyle.line.LineWidth                 =   2;
-defaultStyle.line.color                     =   pastel(defaultColors);
+defaultStyle.line.Color                     =   pastel(defaultColors);
 %REGRESSION LINES
 defaultStyle.regressionLine.LineWidth       =   2;
 %ERRORBARS
-defaultStyle.errorBar.width                 =   1;% multiplies current width of error bar => 1 doesn't change the width of the error bar
-defaultStyle.errorBar.LineWidth             =   2.5;
-defaultStyle.errorBar.color                 =   pastel(defaultColors);
+defaultStyle.errorbar.width                 =   1;% multiplies current width of error bar => 1 doesn't change the width of the error bar
+defaultStyle.errorbar.LineWidth             =   2.5;
+defaultStyle.errorbar.Color                 =   pastel(defaultColors);
+defaultStyle.errorbar.Nudge                 =   true;
 %SHADED
 defaultStyle.shaded.LineWidth               =   2;
 defaultStyle.shaded.FaceColor               =   pastel(defaultColors);

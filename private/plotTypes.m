@@ -25,7 +25,7 @@ for ii = 1:length(h)
             if isfield(get(h(ii)),'BarLayout')
                 plotType{ii}='bar';
             else
-                plotType{ii}='errorBar';
+                plotType{ii}='errorbar';
             end
         else
             if logical(all(get(h(ii),'Marker')=='.' | get(h(ii),'Marker')=='o'))
