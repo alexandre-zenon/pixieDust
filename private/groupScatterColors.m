@@ -9,7 +9,7 @@ if ~isempty(colors)
         allColors=colors;
     end
     allColors=allColors(:,1)+10*allColors(:,2)+100*allColors(:,3);
-    if isempty(strfind(plotType,'bar'))
+    if ~any(strcmp(plotType,'bar'))
         allScatters=strcmp(get(children,'Marker'),'o')|strcmp(get(children,'Marker'),'.');
         [a,b,scatterGroups]=unique(allColors);
         scatterGroups=scatterGroups.*allScatters;
