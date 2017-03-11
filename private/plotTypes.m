@@ -28,7 +28,8 @@ for ii = 1:length(h)
                 plotType{ii}='errorbar';
             end
         else
-            if logical(all(get(h(ii),'Marker')=='.' | get(h(ii),'Marker')=='o'))
+            if ~strcmp(get(h(ii),'Marker'),'none')
+            %if logical(all(get(h(ii),'Marker')=='.' | get(h(ii),'Marker')=='o'))
                 plotType{ii}='scatter';
             elseif ~strcmp(get(h(ii),'LineStyle'),'none')
                 if strcmp(get(h(ii),'UserData'),'regressionLine')
