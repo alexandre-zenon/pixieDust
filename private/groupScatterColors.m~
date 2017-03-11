@@ -1,8 +1,5 @@
 function [scatterGroups,xdata,ydata]=groupScatterColors(children,colors,plotType)
 scatterGroups=false(length(children),1);
-for ii = 1:length(children)
-    [subfield,fieldIndex(ii)]=scatterMarkerField(children(ii));
-end
 xdata={};
 ydata={};
 if ~isempty(colors)
@@ -11,7 +8,7 @@ if ~isempty(colors)
     else
         allColors=colors;
     end
-    allColors=allColors(:,1)+10*allColors(:,2)+100*allColors(:,3)+1000*fieldIndex(:);
+    allColors=allColors(:,1)+10*allColors(:,2)+100*allColors(:,3);
     if ~any(strcmp(plotType,'bar'))
         allScatters=strcmp(plotType,'scatter');
         [a,b,scatterGroups]=unique(allColors);

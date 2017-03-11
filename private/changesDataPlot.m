@@ -38,15 +38,42 @@ for cc = children'
     switch plotType{next}
         case 'scatter'
             nextScatter=nextScatter+1;
-            l=mod(nextScatter-1,size(style.scatter.MarkerFaceColor,1))+1;
-            faceCol=style.scatter.MarkerFaceColor(l,:);
-            edgeCol=style.scatter.MarkerEdgeColor(l,:);
+            
+            %%% TRANSPARENCY IN BETA VERSION
+            if isfield(style,'scatter') && isfield(style.scatter,'Transparency') && style.scatter.Transparency
+                set(cc,'Visible','off');
+                fpos=get(gcf,'Position');
+                fw=fpos(3);
+                fh=fpos(4);
+                apos=get(gca,'Position');
+                aw=apos(3);
+                ah=apos(4);
+                w=fw*aw;
+                h=ah*fh;
+                sy=diff(get(gca,'YLim'));
+                sx=diff(get(gca,'XLim'));
+                xperunit=sx/w;
+                yperunit=sy/h;
+                t = linspace(0, 2*pi);
+                rx = xperunit*style.scatter.MarkerSize/30;
+                ry = yperunit*style.scatter.MarkerSize/30;
+                x = bsxfun(@plus,get(cc,'XData')',rx*cos(t));
+                y = bsxfun(@plus,get(cc,'YData')',ry*sin(t));
+                p=patch(x', y',colData{scatterGroups(next)});
+                appliesStyle(style,'transparentScatter',p,l);
+            else
+                %appliesStyle(style,'scatter',cc,l);
+            end
+            subfield=scatterMarkerField(cc);
+            l=mod(nextScatter-1,size(style.scatter.(subfield).MarkerFaceColor,1))+1;
+            faceCol=style.scatter.(subfield).MarkerFaceColor(l,:);
+            edgeCol=style.scatter.(subfield).MarkerEdgeColor(l,:);
             if scatterGroups(next)>0
                 xdata{scatterGroups(next)}=[xdata{scatterGroups(next)}; get(cc,'XData')'];
                 ydata{scatterGroups(next)}=[ydata{scatterGroups(next)}; get(cc,'YData')'];
                 colData{scatterGroups(next)}=faceCol;
             end
-            appliesStyle(style,'scatter',cc,l);
+            appliesStyle(style.scatter,subfield,cc,l);
         case 'shaded'
             nextShaded=nextShaded+1;
             nextLegend=nextLegend+1;
@@ -63,11 +90,13 @@ for cc = children'
             nextLine=nextLine+1;
             l=mod(nextLine-1,size(style.line.Color,1))+1;
             if any(strcmp(plotType,'shaded'))% then we assume that the line is part of the shaded area
+                appliesStyle(style.shaded,'line',cc,l);
             else
                 nextLegend=nextLegend+1;
                 plot2Label(nextLegend)=cc;
+                appliesStyle(style,'line',cc,l);
             end
-            appliesStyle(style,'line',cc,l);
+            
         case 'errorbar'
             nextErrorBar=nextErrorBar+1;
             nextLegend=nextLegend+1;

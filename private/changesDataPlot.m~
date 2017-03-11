@@ -46,7 +46,41 @@ for cc = children'
                 ydata{scatterGroups(next)}=[ydata{scatterGroups(next)}; get(cc,'YData')'];
                 colData{scatterGroups(next)}=faceCol;
             end
-            appliesStyle(style,'scatter',cc,l);
+            %%% TRANSPARENCY IN BETA VERSION
+            if isfield(style,'scatter') && isfield(style.scatter,'Transparency') && style.scatter.Transparency
+                set(cc,'Visible','off');
+                fpos=get(gcf,'Position');
+                fw=fpos(3);
+                fh=fpos(4);
+                apos=get(gca,'Position');
+                aw=apos(3);
+                ah=apos(4);
+                w=fw*aw;
+                h=ah*fh;
+                sy=diff(get(gca,'YLim'));
+                sx=diff(get(gca,'XLim'));
+                xperunit=sx/w;
+                yperunit=sy/h;
+                t = linspace(0, 2*pi);
+                rx = xperunit*style.scatter.MarkerSize/30;
+                ry = yperunit*style.scatter.MarkerSize/30;
+                x = bsxfun(@plus,get(cc,'XData')',rx*cos(t));
+                y = bsxfun(@plus,get(cc,'YData')',ry*sin(t));
+                p=patch(x', y',colData{scatterGroups(next)});
+                appliesStyle(style,'transparentScatter',p,l);
+            else
+                appliesStyle(style,'scatter',cc,l);
+            end
+            subfield=scatterMarker(cc);
+            switch get(cc,'Marker')
+                case 'o'
+                    fi='o';
+                case '.'
+                    fi='dot';
+                case '*'
+                    fi='asterisk';
+            end
+            appliesStyle(style.scatter,fi,cc,l);
         case 'shaded'
             nextShaded=nextShaded+1;
             nextLegend=nextLegend+1;
@@ -102,15 +136,21 @@ for cc = children'
             if isfield(style,'errorbar') && isfield(style.errorbar,'Nudge') && style.errorbar.Nudge 
                 numEB=sum(strcmp(plotType,'errorbar'));
                 minSpace=min(diff(errorbarXData(1:9:end)));
+                sep=minSpace/10;
+                d=(sep*(l-1));
+                errorbarXData=errorbarXData+d-(sep*(numEB-1))/2;
                 
-                errorbarXData=errorbarXData-;
+                errorbarLineXData          = ...
+                get(hE_c(1), 'XData'       );
+                errorbarLineXData=errorbarLineXData+d-(sep*(numEB-1))/2;
+                set(hE_c(1), 'XData', errorbarLineXData);
             end
             set(hE_c(end), 'XData', errorbarXData);
             set(hE_c(end), 'YData', errorbarYData);
             appliesStyle(style,'errorbar',cc,l);
             
-            minX=minX-errorbarWidth;
-            maxX=maxX+errorbarWidth;
+            maxX=max([maxX; errorbarXData(:)]);
+            minX=min([minX; errorbarXData(:)]);
         otherwise
             appliesStyle(style,plotType{next},cc,[]);
         

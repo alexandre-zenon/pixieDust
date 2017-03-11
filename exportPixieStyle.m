@@ -61,6 +61,8 @@ for cc=children'
         case 'scatter'
             nextScatter=nextScatter+1;
             style=fillDefaultProperties(style,'scatter',cc,nextScatter);
+            subfield=scatterMarkerField(cc);
+            style.scatter=fillDefaultProperties(style.scatter,subfield,cc,nextScatter);
         case 'line'
             nextLine=nextLine+1;
             style=fillDefaultProperties(style,'line',cc,nextLine);
@@ -89,7 +91,7 @@ defaultStyle=loadDefaultStyle;
 if isfield(defaultStyle,fieldname)
     defaultProperties=fieldnames(defaultStyle.(fieldname));
     for aa = 1:length(defaultProperties)
-        if ~isempty(strfind(lower(defaultProperties{aa}),'color'))
+        if ~isempty(strfind(lower(defaultProperties{aa}),'color')) && ~ischar(get(object,defaultProperties{aa}))
             style.(fieldname).(defaultProperties{aa})(index,:)=get(object,defaultProperties{aa});
         elseif ~isempty(strfind(lower(defaultProperties{aa}),'axes'))
             axesProperties=fieldnames(defaultStyle.(fieldname).axes);
@@ -103,7 +105,9 @@ if isfield(defaultStyle,fieldname)
                 style.(fieldname).axes.(titleProperties{aa})=get(get(gca,'Title'),titleProperties{aa});
             end
         else
-            style.(fieldname).(defaultProperties{aa})=get(object,defaultProperties{aa});
+            if isfield(get(object),defaultProperties{aa})
+                style.(fieldname).(defaultProperties{aa})=get(object,defaultProperties{aa});
+            end
         end
     end
 end
